@@ -1,0 +1,2305 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>李居明Agent - 風水命理起名系統</title>
+    <!-- Ant Design Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ant-design/icons@5.3.0/dist/reset.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @font-face {
+            font-family: 'Traditional Chinese';
+            src: local('PingFang TC'), local('Microsoft JhengHei'), local('Noto Sans TC');
+        }
+
+        body {
+            font-family: 'Traditional Chinese', 'Microsoft YaHei', 'PingFang TC', 'Noto Sans TC', 'SimSun', serif;
+            background: 
+                linear-gradient(135deg, rgba(139, 0, 0, 0.02) 0%, rgba(139, 0, 0, 0.05) 100%),
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="%23FFD700" opacity="0.1"/></svg>') repeat;
+            min-height: 100vh;
+            padding: 20px;
+            background-color: #FAF8F5;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* Decorative Top Border */
+        .top-decoration {
+            height: 8px;
+            background: linear-gradient(90deg, 
+                #8B0000 0%, #8B0000 20%, 
+                transparent 20%, transparent 25%,
+                #FFD700 25%, #FFD700 30%, 
+                transparent 30%, transparent 35%,
+                #8B0000 35%, #8B0000 45%, 
+                transparent 45%, transparent 50%,
+                #FFD700 50%, #FFD700 55%, 
+                transparent 55%, transparent 60%,
+                #8B0000 60%, #8B0000 70%, 
+                transparent 70%, transparent 75%,
+                #FFD700 75%, #FFD700 80%, 
+                transparent 80%, transparent 85%,
+                #8B0000 85%, #8B0000 100%);
+            margin-bottom: 20px;
+            border-radius: 4px 4px 0 0;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 50px 30px 40px;
+            background: linear-gradient(180deg, #8B0000 0%, #6B0000 50%, #5A0000 100%);
+            color: #FFD700;
+            border-radius: 20px 20px 0 0;
+            margin-bottom: 0;
+            box-shadow: 
+                0 10px 40px rgba(139, 0, 0, 0.4),
+                inset 0 2px 0 rgba(255, 215, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '◆ ◇ ◆ ◇ ◆';
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 14px;
+            opacity: 0.4;
+            letter-spacing: 20px;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                #FFD700 20%, 
+                #FFD700 80%, 
+                transparent 100%);
+        }
+
+        .header h1 {
+            font-size: 3em;
+            text-shadow: 
+                3px 3px 6px rgba(0, 0, 0, 0.5),
+                0 0 30px rgba(255, 215, 0, 0.3);
+            margin-bottom: 15px;
+            letter-spacing: 8px;
+            font-weight: bold;
+            background: linear-gradient(180deg, #FFD700 0%, #FFD700 50%, #F4C430 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header .subtitle {
+            font-size: 1.2em;
+            opacity: 0.95;
+            letter-spacing: 5px;
+            padding: 8px 30px;
+            border-top: 1px solid rgba(255, 215, 0, 0.4);
+            border-bottom: 1px solid rgba(255, 215, 0, 0.4);
+            display: inline-block;
+            margin-top: 15px;
+        }
+
+        .header .tagline {
+            font-size: 0.95em;
+            opacity: 0.8;
+            margin-top: 12px;
+            font-style: italic;
+        }
+
+        /* Input Section */
+        .input-section {
+            background: linear-gradient(180deg, #FFFEF8 0%, #FFFEF0 100%);
+            padding: 45px 50px;
+            border-radius: 0 0 15px 15px;
+            box-shadow: 
+                0 10px 40px rgba(139, 0, 0, 0.15),
+                0 0 0 1px rgba(139, 0, 0, 0.1);
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .input-section::before {
+            content: '✦ ✦ ✦';
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #8B0000;
+            opacity: 0.3;
+            letter-spacing: 15px;
+        }
+
+        .section-title {
+            color: #8B0000;
+            font-size: 1.6em;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px double #FFD700;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            justify-content: center;
+            letter-spacing: 3px;
+        }
+
+        .section-title .icon {
+            font-size: 1.3em;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 5px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #5A0000;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 1.05em;
+            letter-spacing: 2px;
+        }
+
+        .form-group label::before {
+            content: '◆ ';
+            color: #FFD700;
+            margin-right: 8px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #D4C4A8;
+            border-radius: 10px;
+            font-size: 1.05em;
+            transition: all 0.3s ease;
+            background: linear-gradient(180deg, #FFFFFF 0%, #FFFEF8 100%);
+            color: #333;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #8B0000;
+            box-shadow: 
+                0 0 0 3px rgba(139, 0, 0, 0.1),
+                0 5px 20px rgba(139, 0, 0, 0.15);
+            background: #fff;
+        }
+
+        .form-group input::placeholder {
+            color: #B0A090;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .btn-calculate {
+            background: linear-gradient(135deg, #8B0000 0%, #A52A2A 50%, #8B0000 100%);
+            color: #FFD700;
+            border: 3px solid #FFD700;
+            padding: 0 70px;
+            height: 65px;
+            font-size: 1.4em;
+            border-radius: 60px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 40px auto 20px;
+            transition: all 0.4s ease;
+            box-shadow: 
+                0 8px 30px rgba(139, 0, 0, 0.5),
+                0 0 0 1px rgba(255, 215, 0, 0.3);
+            font-weight: bold;
+            letter-spacing: 10px;
+            position: relative;
+            overflow: hidden;
+            line-height: 1;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .btn-calculate::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-calculate:hover::before {
+            left: 100%;
+        }
+
+        .btn-calculate:hover {
+            transform: translateY(-4px);
+            box-shadow: 
+                0 12px 45px rgba(139, 0, 0, 0.6),
+                0 0 30px rgba(255, 215, 0, 0.4);
+        }
+
+        .btn-calculate:disabled {
+            background: linear-gradient(135deg, #888 0%, #666 100%);
+            border-color: #999;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        /* Buddhist Loading Animation */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, #2D1810 0%, #1A0F0A 50%, #0D0705 100%);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .loading-buddhist {
+            text-align: center;
+            color: #FFD700;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        /* Lotus Flower Animation */
+        .lotus-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 30px;
+        }
+
+        .lotus-petal {
+            position: absolute;
+            width: 60px;
+            height: 80px;
+            background: linear-gradient(180deg, #FFD700 0%, #FF8C00 50%, #FF4500 100%);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            transform-origin: bottom center;
+            animation: lotusBloom 3s ease-in-out infinite;
+            box-shadow: 
+                0 0 20px rgba(255, 215, 0, 0.5),
+                inset 0 -10px 20px rgba(139, 0, 0, 0.3);
+        }
+
+        .lotus-petal.petal-1 {
+            bottom: 50%;
+            left: 50%;
+            transform: translateX(-50%) rotate(0deg);
+            animation-delay: 0s;
+        }
+
+        .lotus-petal.petal-2 {
+            bottom: 50%;
+            left: 50%;
+            transform: translateX(-50%) rotate(72deg);
+            animation-delay: 0.2s;
+        }
+
+        .lotus-petal.petal-3 {
+            bottom: 50%;
+            left: 50%;
+            transform: translateX(-50%) rotate(144deg);
+            animation-delay: 0.4s;
+        }
+
+        .lotus-petal.petal-4 {
+            bottom: 50%;
+            left: 50%;
+            transform: translateX(-50%) rotate(216deg);
+            animation-delay: 0.6s;
+        }
+
+        .lotus-petal.petal-5 {
+            bottom: 50%;
+            left: 50%;
+            transform: translateX(-50%) rotate(288deg);
+            animation-delay: 0.8s;
+        }
+
+        .lotus-center {
+            position: absolute;
+            bottom: 35%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 50px;
+            background: radial-gradient(circle, #FFD700 0%, #FF8C00 100%);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 
+                0 0 30px rgba(255, 215, 0, 0.8),
+                0 0 60px rgba(255, 215, 0, 0.4);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .dharma-wheel {
+            font-size: 28px;
+            animation: spin-slow 4s linear infinite;
+        }
+
+        @keyframes lotusBloom {
+            0%, 100% {
+                transform: translateX(-50%) rotate(var(--rotation, 0deg)) scaleY(1);
+                opacity: 1;
+            }
+            50% {
+                transform: translateX(-50%) rotate(var(--rotation, 0deg)) scaleY(1.1);
+                opacity: 0.9;
+            }
+        }
+
+        .lotus-petal.petal-1 { --rotation: 0deg; }
+        .lotus-petal.petal-2 { --rotation: 72deg; }
+        .lotus-petal.petal-3 { --rotation: 144deg; }
+        .lotus-petal.petal-4 { --rotation: 216deg; }
+        .lotus-petal.petal-5 { --rotation: 288deg; }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: translateX(-50%) scale(1);
+                box-shadow: 
+                    0 0 30px rgba(255, 215, 0, 0.8),
+                    0 0 60px rgba(255, 215, 0, 0.4);
+            }
+            50% {
+                transform: translateX(-50%) scale(1.1);
+                box-shadow: 
+                    0 0 50px rgba(255, 215, 0, 1),
+                    0 0 100px rgba(255, 215, 0, 0.6);
+            }
+        }
+
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Buddhist Symbol */
+        .buddhist-symbol {
+            font-size: 60px;
+            color: rgba(255, 215, 0, 0.3);
+            margin: 20px 0;
+            animation: float 3s ease-in-out infinite;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+                opacity: 0.3;
+            }
+            50% {
+                transform: translateY(-10px);
+                opacity: 0.5;
+            }
+        }
+
+        .loading-text-buddhist {
+            font-size: 1.8em;
+            margin: 20px 0;
+            letter-spacing: 8px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            font-weight: 300;
+        }
+
+        /* Loading Steps */
+        .loading-steps {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 30px 0;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            opacity: 0.4;
+            transform: scale(0.9);
+            transition: all 0.5s ease;
+        }
+
+        .step.active {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .step-icon {
+            font-size: 2em;
+            filter: grayscale(50%);
+            transition: all 0.5s ease;
+        }
+
+        .step.active .step-icon {
+            filter: grayscale(0%);
+            animation: bounce 0.5s ease;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .step-text {
+            font-size: 0.9em;
+            letter-spacing: 3px;
+            color: rgba(255, 215, 0, 0.8);
+        }
+
+        .buddhist-quote {
+            font-size: 1.1em;
+            color: rgba(255, 215, 0, 0.6);
+            margin-top: 30px;
+            font-style: italic;
+            letter-spacing: 5px;
+            font-family: 'Traditional Chinese', serif;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Countdown Timer */
+        .loading-countdown {
+            font-size: 1.2em;
+            color: rgba(255, 215, 0, 0.7);
+            margin-top: 20px;
+            letter-spacing: 3px;
+        }
+
+        /* Results Section */
+        .results-section {
+            display: none;
+            background: linear-gradient(180deg, #FFFEF8 0%, #FFF8E8 100%);
+            padding: 45px 50px;
+            border-radius: 15px;
+            box-shadow: 
+                0 15px 50px rgba(139, 0, 0, 0.2),
+                0 0 0 1px rgba(139, 0, 0, 0.1);
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .results-section::before {
+            content: '✦ ✦ ✦';
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #8B0000;
+            opacity: 0.3;
+            letter-spacing: 15px;
+        }
+
+        .results-section.active {
+            display: block;
+        }
+
+        .result-header {
+            text-align: center;
+            margin-bottom: 35px;
+            padding-bottom: 25px;
+            border-bottom: 3px double #FFD700;
+        }
+
+        .result-header h2 {
+            color: #8B0000;
+            font-size: 2.2em;
+            margin-bottom: 15px;
+            letter-spacing: 5px;
+            text-shadow: 0 2px 4px rgba(139, 0, 0, 0.2);
+        }
+
+        .result-header .divider {
+            color: #FFD700;
+            font-size: 1.5em;
+            margin: 0 15px;
+        }
+
+        .birth-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 35px;
+            padding: 25px;
+            background: 
+                linear-gradient(135deg, rgba(139, 0, 0, 0.03) 0%, rgba(139, 0, 0, 0.08) 100%);
+            border-radius: 15px;
+            border: 2px solid rgba(139, 0, 0, 0.15);
+        }
+
+        .info-item {
+            text-align: center;
+            padding: 10px;
+        }
+
+        .info-item .label {
+            color: #8B0000;
+            font-weight: bold;
+            font-size: 0.95em;
+            margin-bottom: 8px;
+            letter-spacing: 2px;
+        }
+
+        .info-item .value {
+            color: #333;
+            font-size: 1.15em;
+            font-weight: 500;
+        }
+
+        /* Bazi Grid */
+        .bazi-section {
+            margin-bottom: 35px;
+        }
+
+        .bazi-section h3 {
+            color: #8B0000;
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            letter-spacing: 3px;
+        }
+
+        .bazi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            max-width: 450px;
+            margin: 0 auto;
+            border: 4px double #8B0000;
+            padding: 20px;
+            background: linear-gradient(180deg, #FFF8DC 0%, #FFF5DC 100%);
+            border-radius: 15px;
+            box-shadow: 
+                0 5px 25px rgba(139, 0, 0, 0.2),
+                inset 0 0 30px rgba(255, 215, 0, 0.1);
+        }
+
+        .bazi-cell {
+            text-align: center;
+            padding: 20px 10px;
+            background: linear-gradient(180deg, #FFFFFF 0%, #FFFEF8 100%);
+            border: 2px solid #D4C4A8;
+            border-radius: 10px;
+            font-size: 1.6em;
+            font-weight: bold;
+            color: #8B0000;
+            box-shadow: 
+                0 3px 10px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 1);
+        }
+
+        .bazi-label {
+            font-size: 0.85em;
+            color: #8B0000;
+            margin-bottom: 8px;
+            opacity: 0.7;
+            letter-spacing: 2px;
+        }
+
+        .yong-shen {
+            text-align: center;
+            margin-top: 25px;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(139, 0, 0, 0.08) 0%, rgba(255, 215, 0, 0.1) 100%);
+            border-radius: 12px;
+            font-size: 1.25em;
+            color: #5A0000;
+            border: 1px solid rgba(139, 0, 0, 0.2);
+        }
+
+        .yong-shen strong {
+            color: #8B0000;
+            letter-spacing: 2px;
+        }
+        
+        /* Names Section */
+        .names-section {
+            margin-bottom: 35px;
+        }
+
+        .names-section h3 {
+            color: #8B0000;
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 25px;
+            letter-spacing: 3px;
+        }
+
+        .primary-names {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 35px;
+        }
+
+        .name-card {
+            background: linear-gradient(180deg, #FFFEF8 0%, #FFF8E8 100%);
+            border: 3px solid #8B0000;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 
+                0 8px 30px rgba(139, 0, 0, 0.15),
+                inset 0 0 40px rgba(255, 215, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .name-card::before {
+            content: '✦';
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #FFD700;
+            font-size: 1.2em;
+        }
+
+        .name-card h4 {
+            color: #8B0000;
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #FFD700;
+            letter-spacing: 3px;
+        }
+
+        .name-display {
+            font-size: 3em;
+            color: #8B0000;
+            font-weight: bold;
+            margin-bottom: 20px;
+            letter-spacing: 10px;
+            text-shadow: 2px 2px 4px rgba(139, 0, 0, 0.2);
+        }
+
+        .name-strokes {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-bottom: 20px;
+        }
+
+        .stroke-item {
+            text-align: center;
+            padding: 8px 15px;
+            background: rgba(139, 0, 0, 0.05);
+            border-radius: 8px;
+        }
+
+        .stroke-item .char {
+            font-size: 1.6em;
+            color: #8B0000;
+            font-weight: bold;
+            display: block;
+        }
+
+        .stroke-item .count {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .fortune-info {
+            text-align: left;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px dashed rgba(139, 0, 0, 0.2);
+        }
+
+        .fortune-item {
+            margin-bottom: 12px;
+            font-size: 1em;
+            display: flex;
+            align-items: baseline;
+        }
+
+        .fortune-label {
+            color: #8B0000;
+            font-weight: bold;
+            margin-right: 10px;
+            min-width: 80px;
+            letter-spacing: 1px;
+        }
+
+        /* Backup Characters */
+        .backup-chars {
+            background: linear-gradient(180deg, #FFF8DC 0%, #FFF5D8 100%);
+            border: 3px solid #FFD700;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 35px;
+            box-shadow: 
+                0 5px 20px rgba(139, 0, 0, 0.1),
+                inset 0 0 30px rgba(255, 215, 0, 0.1);
+        }
+
+        .backup-chars h3 {
+            color: #8B0000;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            letter-spacing: 3px;
+        }
+
+        .chars-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+            gap: 12px;
+        }
+
+        .char-box {
+            text-align: center;
+            padding: 12px 8px;
+            background: linear-gradient(180deg, #FFFFFF 0%, #FFFEF8 100%);
+            border: 2px solid #D4C4A8;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .char-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(139, 0, 0, 0.2);
+            border-color: #8B0000;
+        }
+
+        .char-box .char {
+            font-size: 2em;
+            color: #8B0000;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .char-box .stroke {
+            font-size: 0.85em;
+            color: #888;
+        }
+
+        /* Fortune Analysis */
+        .fortune-analysis {
+            background: linear-gradient(180deg, #FFFEF8 0%, #FFF8E8 100%);
+            border: 3px solid #8B0000;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 35px;
+            box-shadow: 
+                0 8px 30px rgba(139, 0, 0, 0.15),
+                inset 0 0 50px rgba(255, 215, 0, 0.03);
+        }
+
+        .fortune-analysis h3 {
+            color: #8B0000;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.5em;
+            letter-spacing: 3px;
+        }
+
+        .fortune-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .fortune-card {
+            background: linear-gradient(180deg, #FFFFFF 0%, #FFFEF8 100%);
+            border: 2px solid #FFD700;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 
+                0 5px 20px rgba(139, 0, 0, 0.1),
+                inset 0 0 20px rgba(255, 215, 0, 0.05);
+        }
+
+        .fortune-card h4 {
+            color: #8B0000;
+            margin-bottom: 12px;
+            font-size: 1.15em;
+            letter-spacing: 2px;
+        }
+
+        .fortune-card .number {
+            font-size: 1.8em;
+            color: #8B0000;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .fortune-card .gua-name {
+            color: #FFD700;
+            background: linear-gradient(135deg, #8B0000 0%, #A52A2A 100%);
+            padding: 5px 15px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 12px;
+            font-size: 0.95em;
+            letter-spacing: 1px;
+            box-shadow: 0 3px 10px rgba(139, 0, 0, 0.3);
+        }
+
+        .fortune-card .description {
+            color: #444;
+            font-size: 1em;
+            line-height: 1.7;
+        }
+
+        /* English Names */
+        .english-names {
+            background: linear-gradient(180deg, #FFF8DC 0%, #FFF5D8 100%);
+            border: 3px solid #FFD700;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 35px;
+            box-shadow: 
+                0 5px 20px rgba(139, 0, 0, 0.1),
+                inset 0 0 30px rgba(255, 215, 0, 0.1);
+        }
+
+        .english-names h3 {
+            color: #8B0000;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            letter-spacing: 3px;
+        }
+
+        .english-names-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+            gap: 12px;
+        }
+
+        .english-name {
+            text-align: center;
+            padding: 12px 10px;
+            background: linear-gradient(180deg, #FFFFFF 0%, #FFFEF8 100%);
+            border: 2px solid #D4C4A8;
+            border-radius: 10px;
+            color: #8B0000;
+            font-weight: bold;
+            font-size: 1.05em;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .english-name:hover {
+            background: linear-gradient(135deg, #8B0000 0%, #A52A2A 100%);
+            color: #FFD700;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 0, 0, 0.3);
+        }
+
+        /* Ju Ming Comment */
+        .ju-ming-comment {
+            background: linear-gradient(135deg, #8B0000 0%, #6B0000 50%, #5A0000 100%);
+            color: #FFD700;
+            padding: 35px;
+            border-radius: 15px;
+            margin-bottom: 35px;
+            box-shadow: 
+                0 10px 40px rgba(139, 0, 0, 0.5),
+                inset 0 2px 0 rgba(255, 215, 0, 0.2);
+            border: 2px solid #FFD700;
+        }
+
+        .ju-ming-comment::before {
+            content: '◆ ◇ ◆ ◇ ◆';
+            display: block;
+            text-align: center;
+            margin-bottom: 20px;
+            letter-spacing: 15px;
+            opacity: 0.5;
+        }
+
+        .ju-ming-comment h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            letter-spacing: 5px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .ju-ming-comment .comment-text {
+            font-size: 1.15em;
+            line-height: 2;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+
+        /* Disclaimer */
+        .disclaimer {
+            background: linear-gradient(180deg, #FFF5F5 0%, #FFE8E8 100%);
+            border: 2px solid rgba(139, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            color: #5A0000;
+            font-size: 0.95em;
+            line-height: 1.8;
+            box-shadow: inset 0 0 30px rgba(139, 0, 0, 0.05);
+        }
+
+        .disclaimer strong {
+            display: block;
+            margin-bottom: 12px;
+            font-size: 1.1em;
+            color: #8B0000;
+            letter-spacing: 2px;
+        }
+
+        /* PDF Button */
+        .btn-pdf {
+            background: linear-gradient(135deg, #228B22 0%, #2E8B2E 50%, #228B22 100%);
+            color: white;
+            border: 3px solid #90EE90;
+            padding: 18px 50px;
+            font-size: 1.2em;
+            border-radius: 60px;
+            cursor: pointer;
+            display: block;
+            margin: 30px auto;
+            transition: all 0.4s ease;
+            box-shadow: 
+                0 8px 30px rgba(34, 139, 34, 0.4),
+                0 0 0 1px rgba(144, 238, 144, 0.3);
+            font-weight: bold;
+            letter-spacing: 5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-pdf::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-pdf:hover::before {
+            left: 100%;
+        }
+
+        .btn-pdf:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                0 12px 40px rgba(34, 139, 34, 0.5),
+                0 0 30px rgba(144, 238, 144, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .bazi-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .header h1 {
+                font-size: 2em;
+                letter-spacing: 4px;
+            }
+
+            .header .subtitle {
+                font-size: 1em;
+                letter-spacing: 3px;
+            }
+
+            .input-section,
+            .results-section {
+                padding: 30px 20px;
+            }
+
+            .name-display {
+                font-size: 2.2em;
+            }
+        }
+
+        /* ========== Ant Design Form Styles ========== */
+        
+        /* Ant Design Input */
+        .ant-input,
+        .ant-input-affix-wrapper {
+            border-radius: 8px !important;
+            border-color: #d9d9d9 !important;
+            transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1) !important;
+            background: #fff !important;
+        }
+
+        .ant-input:hover,
+        .ant-input-affix-wrapper:hover {
+            border-color: #8B0000 !important;
+        }
+
+        .ant-input:focus,
+        .ant-input-affix-wrapper-focused,
+        .ant-input-affix-wrapper:focus {
+            border-color: #8B0000 !important;
+            box-shadow: 0 0 0 2px rgba(139, 0, 0, 0.1) !important;
+        }
+
+        .ant-input::placeholder {
+            color: #bfbfbf !important;
+        }
+
+        /* Ant Design Select */
+        .ant-select-selector {
+            border-radius: 8px !important;
+            border-color: #d9d9d9 !important;
+            transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1) !important;
+        }
+
+        .ant-select-selector:hover {
+            border-color: #8B0000 !important;
+        }
+
+        .ant-select-focused .ant-select-selector {
+            border-color: #8B0000 !important;
+            box-shadow: 0 0 0 2px rgba(139, 0, 0, 0.1) !important;
+        }
+
+        /* Ant Design Date Picker Trigger */
+        .ant-picker {
+            border-radius: 8px !important;
+            border-color: #d9d9d9 !important;
+            transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1) !important;
+        }
+
+        .ant-picker:hover {
+            border-color: #8B0000 !important;
+        }
+
+        .ant-picker-focused {
+             border-color: #8B0000 !important;
+             box-shadow: 0 0 0 2px rgba(139, 0, 0, 0.1) !important;
+         }
+
+         .ant-picker-input > input::placeholder {
+             color: #bfbfbf !important;
+         }
+
+        /* Ant Design Form Item */
+        .ant-form-item {
+            margin-bottom: 24px;
+        }
+
+        .ant-form-item-label > label {
+            color: #5A0000 !important;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .ant-form-item-label > label::before {
+            display: none !important;
+        }
+
+        .ant-form-item-label > label.ant-form-item-required::after {
+            display: inline-block;
+            margin-right: 4px;
+            color: #ff4d4f;
+            font-size: 14px;
+            font-family: inherit;
+            line-height: 1;
+            content: '*';
+        }
+
+        /* Ant Design Button */
+        .ant-btn-primary {
+            color: #FFD700 !important;
+            border-color: #8B0000 !important;
+            background: linear-gradient(135deg, #8B0000 0%, #A52A2A 100%) !important;
+            border-radius: 8px !important;
+            height: 48px !important;
+            font-size: 16px !important;
+            font-weight: 600 !important;
+            letter-spacing: 2px !important;
+            transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1) !important;
+            box-shadow: 0 2px 8px rgba(139, 0, 0, 0.15) !important;
+        }
+
+        .ant-btn-primary:hover,
+        .ant-btn-primary:focus {
+            color: #FFF !important;
+            border-color: #6B0000 !important;
+            background: linear-gradient(135deg, #6B0000 0%, #8B0000 100%) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(139, 0, 0, 0.25) !important;
+        }
+
+        .ant-btn-primary:active {
+            transform: translateY(0);
+        }
+
+        /* Ant Design Card */
+        .ant-card {
+            border-radius: 16px !important;
+            border: 1px solid #f0f0f0 !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+            transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1) !important;
+        }
+
+        .ant-card:hover {
+            box-shadow: 0 4px 16px rgba(139, 0, 0, 0.12) !important;
+        }
+
+        .ant-card-head {
+            border-bottom: 1px solid #f0f0f0 !important;
+        }
+
+        .ant-card-head-title {
+            color: #8B0000 !important;
+            font-weight: 600;
+        }
+
+        /* Ant Design Tag */
+        .ant-tag {
+            border-radius: 4px !important;
+            border: none !important;
+            font-size: 12px;
+        }
+
+        /* Ant Design Badge */
+        .ant-badge-status-dot {
+            width: 8px !important;
+            height: 8px !important;
+        }
+
+        /* Ant Design Result */
+        .ant-result-title {
+            color: #8B0000 !important;
+            font-weight: 600;
+        }
+
+        .ant-result-subtitle {
+            color: #666 !important;
+        }
+
+        /* Ant Design Descriptions */
+        .ant-descriptions-bordered .ant-descriptions-item-label {
+            background: #fafafa !important;
+            color: #5A0000 !important;
+            font-weight: 500;
+        }
+
+        .ant-descriptions-bordered .ant-descriptions-item-content {
+            color: #333 !important;
+        }
+
+        /* Ant Design Modal */
+        .ant-modal-content {
+            border-radius: 16px !important;
+            overflow: hidden;
+        }
+
+        .ant-modal-header {
+            border-radius: 16px 16px 0 0 !important;
+        }
+
+        .ant-modal-title {
+            color: #8B0000 !important;
+            font-weight: 600;
+        }
+
+        /* Ant Design Message */
+        .ant-message-notice-content {
+            border-radius: 8px !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+        }
+
+        /* Ant Design Spin */
+        .ant-spin-dot-item {
+            background-color: #8B0000 !important;
+        }
+
+        /* Ant Design Empty */
+        .ant-empty-description {
+            color: #999 !important;
+        }
+
+        /* Ant Design Table */
+        .ant-table {
+            border-radius: 8px !important;
+            overflow: hidden;
+        }
+
+        .ant-table-thead > tr > th {
+            background: #fafafa !important;
+            color: #5A0000 !important;
+            font-weight: 600;
+        }
+
+        .ant-table-tbody > tr > td {
+            border-bottom: 1px solid #f0f0f0 !important;
+        }
+
+        .ant-table-tbody > tr:hover > td {
+            background: rgba(139, 0, 0, 0.02) !important;
+        }
+
+        /* Ant Design Steps */
+        .ant-steps-item-process .ant-steps-item-icon {
+            background: #8B0000 !important;
+            border-color: #8B0000 !important;
+        }
+
+        .ant-steps-item-finish .ant-steps-item-icon {
+            border-color: #8B0000 !important;
+        }
+
+        .ant-steps-item-finish .ant-steps-item-icon > .ant-steps-icon {
+            color: #8B0000 !important;
+        }
+
+        .ant-steps-item-title {
+            color: #5A0000 !important;
+            font-weight: 500;
+        }
+
+        /* Ant Design Collapse */
+        .ant-collapse {
+            border-radius: 8px !important;
+            border: 1px solid #f0f0f0 !important;
+            background: #fff !important;
+        }
+
+        .ant-collapse-item {
+            border-bottom: 1px solid #f0f0f0 !important;
+        }
+
+        .ant-collapse-header {
+            color: #5A0000 !important;
+            font-weight: 500;
+        }
+
+        /* Ant Design Tabs */
+        .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+            color: #8B0000 !important;
+            font-weight: 600;
+        }
+
+        .ant-tabs-ink-bar {
+            background: #8B0000 !important;
+        }
+
+        /* Ant Design Radio */
+        .ant-radio-wrapper {
+            color: #5A0000 !important;
+            font-size: 14px;
+        }
+
+        .ant-radio {
+            border-color: #d9d9d9 !important;
+        }
+
+        .ant-radio:hover {
+            border-color: #8B0000 !important;
+        }
+
+        .ant-radio-checked .ant-radio-inner {
+            border-color: #8B0000 !important;
+        }
+
+        .ant-radio-checked .ant-radio-inner::after {
+            background-color: #8B0000 !important;
+            transform: scale(0.5) !important;
+        }
+
+        .ant-radio-wrapper:hover .ant-radio,
+        .ant-radio:hover .ant-radio-inner {
+            border-color: #8B0000 !important;
+        }
+
+        .ant-radio-disabled .ant-radio-inner {
+            border-color: #d9d9d9 !important;
+        }
+
+        /* Ant Design Checkbox */
+        .ant-checkbox-checked .ant-checkbox-inner {
+            background-color: #8B0000 !important;
+            border-color: #8B0000 !important;
+        }
+
+        /* Ant Design Switch */
+        .ant-switch-checked {
+            background-color: #8B0000 !important;
+        }
+
+        /* Ant Design Slider */
+        .ant-slider-rail {
+            background-color: #f0f0f0 !important;
+        }
+
+        .ant-slider-track {
+            background-color: #8B0000 !important;
+        }
+
+        .ant-slider-handle::after {
+            box-shadow: 0 0 0 2px #8B0000 !important;
+        }
+
+        .ant-slider-handle:hover::after,
+        .ant-slider-handle:focus::after {
+            box-shadow: 0 0 0 4px rgba(139, 0, 0, 0.12) !important;
+        }
+
+        /* Ant Design Rate */
+        .ant-rate-star-full .anticon-star-fill {
+            color: #FFD700 !important;
+        }
+
+        /* Ant Design Progress */
+        .ant-progress-bg {
+            background-color: #8B0000 !important;
+        }
+
+        /* Ant Design Upload */
+        .ant-upload-drag {
+            border: 2px dashed #d9d9d9 !important;
+            border-radius: 8px !important;
+            transition: all 0.3s !important;
+        }
+
+        .ant-upload-drag:hover {
+            border-color: #8B0000 !important;
+        }
+
+        .ant-upload-drag-icon .anticon {
+            color: #8B0000 !important;
+        }
+
+        /* ========== Custom Ant Design Components ========== */
+
+        /* Custom Input Group */
+        .ant-input-group-addon {
+            background: #fafafa !important;
+            border-color: #d9d9d9 !important;
+            border-radius: 8px 0 0 8px !important;
+        }
+
+        /* Custom Picker Range */
+        .ant-picker-range {
+            border-radius: 8px !important;
+        }
+
+        /* Custom Input Number */
+        .ant-input-number {
+            border-radius: 8px !important;
+            border-color: #d9d9d9 !important;
+            transition: all 0.3s !important;
+        }
+
+        .ant-input-number:hover {
+            border-color: #8B0000 !important;
+        }
+
+        .ant-input-number-focused {
+            border-color: #8B0000 !important;
+            box-shadow: 0 0 0 2px rgba(139, 0, 0, 0.1) !important;
+        }
+
+        /* Custom Cascader */
+        .ant-cascader-menus {
+            border-radius: 8px !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+        }
+
+        /* Custom Transfer */
+        .ant-transfer-list-header {
+            background: #fafafa !important;
+        }
+
+        /* Custom Calendar */
+        .ant-picker-calendar-header {
+            padding: 12px 16px !important;
+        }
+
+        .ant-picker-cell-selected .ant-picker-cell-inner {
+            background: #8B0000 !important;
+            border-radius: 4px !important;
+        }
+
+        /* Custom Tree */
+        .ant-tree-node-content-wrapper:hover {
+            background-color: rgba(139, 0, 0, 0.04) !important;
+        }
+
+        .ant-tree-node-content-wrapper.ant-tree-node-selected {
+            background-color: rgba(139, 0, 0, 0.08) !important;
+        }
+
+        /* Custom Mentions */
+        .ant-mentions-dropdown {
+            border-radius: 8px !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+        }
+
+        /* Custom Segmented */
+        .ant-segmented-item-selected {
+            background-color: rgba(139, 0, 0, 0.1) !important;
+        }
+
+        .ant-segmented-item-selected .ant-segmented-item-label {
+            color: #8B0000 !important;
+        }
+
+        /* Ant Design Animations */
+        .ant-fade-in-enter,
+        .ant-fade-in-appear {
+            animation: antFadeIn 0.3s ease;
+        }
+
+        .ant-fade-in-exit {
+            animation: antFadeOut 0.3s ease;
+        }
+
+        @keyframes antFadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes antFadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        .ant-zoom-enter,
+        .ant-zoom-appear {
+            animation: antZoomIn 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+        }
+
+        .ant-zoom-exit {
+            animation: antZoomOut 0.3s cubic-bezier(0.52, -0.27, 0.9, 0.66);
+        }
+
+        @keyframes antZoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes antZoomOut {
+            from {
+                opacity: 1;
+                transform: scale(1);
+            }
+            to {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+        }
+
+        .ant-slide-up-enter,
+        .ant-slide-up-appear {
+            animation: antSlideUpIn 0.3s ease;
+        }
+
+        .ant-slide-up-exit {
+            animation: antSlideUpOut 0.3s ease;
+        }
+
+        @keyframes antSlideUpIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes antSlideUpOut {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+        }
+
+        /* ========== Mobile Responsive Ant Design ========== */
+        @media (max-width: 768px) {
+            .ant-form-item {
+                margin-bottom: 16px;
+            }
+
+            .ant-btn-primary {
+                height: 44px !important;
+                font-size: 14px !important;
+            }
+
+            .ant-card {
+                border-radius: 12px !important;
+            }
+        }
+
+        /* Ant Design Icon Styles */
+        .anticon {
+            transition: all 0.3s;
+        }
+
+        .anticon:hover {
+            opacity: 0.8;
+        }
+
+        /* Smooth transitions for all Ant Design components */
+        .ant-btn,
+        .ant-input,
+        .ant-select-selector,
+        .ant-picker,
+        .ant-card,
+        .ant-tag,
+        .ant-modal,
+        .ant-dropdown-menu-item {
+            transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1) !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Decorative Top Border -->
+        <div class="top-decoration"></div>
+        
+        <!-- Header -->
+        <div class="header">
+            <h1>李居明Agent</h1>
+            <div class="subtitle">風水命理起名系統</div>
+            <div class="tagline">弘揚中華古文化 · 傳承千年智慧</div>
+        </div>
+        
+        <!-- Input Section -->
+        <div class="input-section">
+            <h2 class="section-title"><span class="icon">✦</span> 請輸入新生兒資料 <span class="icon">✦</span></h2>
+            
+            <form id="namingForm" class="ant-form">
+                <div class="form-grid">
+                    <div class="form-group ant-form-item">
+                        <label for="surname" class="ant-form-item-required">姓氏</label>
+                        <input type="text" id="surname" class="ant-input" name="surname" required placeholder="請輸入姓氏" maxlength="2" style="padding-right: 10px;">
+                    </div>
+                    
+                    <div class="form-group ant-form-item">
+                        <label for="gender" class="ant-form-item-required">性別</label>
+                        <div class="ant-select ant-select-outlined">
+                            <select id="gender" class="ant-select-selector" name="gender" required>
+                                <option value="">請選擇</option>
+                                <option value="男">男</option>
+                                <option value="女">女</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group ant-form-item">
+                        <label for="birthDate" class="ant-form-item-required">新曆出生日期</label>
+                        <div style="position: relative;">
+                            <input type="date" id="birthDate" class="ant-picker ant-input" name="birthDate" required style="width: 100%; padding-right: 45px; cursor: pointer;">
+                            <span class="anticon anticon-calendar" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #8B0000; pointer-events: none;"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group ant-form-item">
+                        <label for="birthTime" class="ant-form-item-required">出生時間</label>
+                        <div style="position: relative;">
+                            <input type="time" id="birthTime" class="ant-picker ant-input" name="birthTime" required style="width: 100%; padding-right: 45px; cursor: pointer;">
+                            <span class="anticon anticon-clock-circle" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #8B0000; pointer-events: none;"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group ant-form-item">
+                        <label for="height">身高</label>
+                        <div class="ant-input-group" style="display: flex; width: 100%;">
+                            <input type="number" id="height" class="ant-input" name="height" placeholder="例如：50" style="flex: 1; border-radius: 8px 0 0 8px; min-width: 0;">
+                            <span class="ant-input-group-addon" style="background: #fafafa; border-color: #d9d9d9; border-radius: 0 8px 8px 0; padding: 0 15px; display: flex; align-items: center; color: #5A0000; font-weight: 500; white-space: nowrap;">cm</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group ant-form-item">
+                        <label for="weight">體重</label>
+                        <div class="ant-input-group" style="display: flex; width: 100%;">
+                            <input type="number" id="weight" class="ant-input" name="weight" placeholder="例如：3.2" step="0.1" style="flex: 1; border-radius: 8px 0 0 8px; min-width: 0;">
+                            <span class="ant-input-group-addon" style="background: #fafafa; border-color: #d9d9d9; border-radius: 0 8px 8px 0; padding: 0 15px; display: flex; align-items: center; color: #5A0000; font-weight: 500; white-space: nowrap;">kg</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group ant-form-item">
+                        <label>家中排行</label>
+                        <div class="ant-select ant-select-outlined">
+                            <select id="birthOrder" name="birthOrder" class="ant-select-selector">
+                                <option value="">請選擇</option>
+                                <option value="長子">長子</option>
+                                <option value="次子">次子</option>
+                                <option value="第三">第三</option>
+                                <option value="第四">第四</option>
+                                <option value="第五">第五</option>
+                                <option value="第六">第六</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group ant-form-item">
+                        <label for="birthplace">出生地</label>
+                        <input type="text" id="birthplace" class="ant-input" name="birthplace" placeholder="例如：香港">
+                    </div>
+                    
+                    <div class="form-group ant-form-item">
+                        <label for="ancestralHome">祖籍</label>
+                        <input type="text" id="ancestralHome" class="ant-input" name="ancestralHome" placeholder="例如：廣東潮州">
+                    </div>
+                </div>
+                
+                <div class="section-title" style="margin-top: 30px;"><span class="icon">✦</span> 父母資料（選填）<span class="icon">✦</span></div>
+                
+                <div class="form-grid">
+                    <div class="form-group ant-form-item">
+                        <label for="fatherName">父親姓名</label>
+                        <input type="text" id="fatherName" class="ant-input" name="fatherName" placeholder="父親姓名">
+                    </div>
+                    
+                    <div class="form-group ant-form-item">
+                        <label for="fatherBirth">父親出生日期</label>
+                        <div style="position: relative;">
+                            <input type="date" id="fatherBirth" class="ant-picker ant-input" name="fatherBirth" style="width: 100%; padding-right: 45px; cursor: pointer;">
+                            <span class="anticon anticon-calendar" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #8B0000; pointer-events: none;"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group ant-form-item">
+                        <label for="motherName">母親姓名</label>
+                        <input type="text" id="motherName" class="ant-input" name="motherName" placeholder="母親姓名">
+                    </div>
+                    
+                    <div class="form-group ant-form-item">
+                        <label for="motherBirth">母親出生日期</label>
+                        <div style="position: relative;">
+                            <input type="date" id="motherBirth" class="ant-picker ant-input" name="motherBirth" style="width: 100%; padding-right: 45px; cursor: pointer;">
+                            <span class="anticon anticon-calendar" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #8B0000; pointer-events: none;"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section-title" style="margin-top: 30px;"><span class="icon">✦</span> 祖父母資料（選填）<span class="icon">✦</span></div>
+                
+                <div class="form-grid">
+                    <div class="form-group ant-form-item">
+                        <label for="grandfatherName">祖父姓名</label>
+                        <input type="text" id="grandfatherName" class="ant-input" name="grandfatherName" placeholder="祖父姓名">
+                    </div>
+                    
+                    <div class="form-group ant-form-item">
+                        <label for="grandfatherBirth">祖父出生日期</label>
+                        <div style="position: relative;">
+                            <input type="date" id="grandfatherBirth" class="ant-picker ant-input" name="grandfatherBirth" style="width: 100%; padding-right: 45px; cursor: pointer;">
+                            <span class="anticon anticon-calendar" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #8B0000; pointer-events: none;"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group ant-form-item">
+                        <label for="grandmotherName">祖母姓名</label>
+                        <input type="text" id="grandmotherName" class="ant-input" name="grandmotherName" placeholder="祖母姓名">
+                    </div>
+                    
+                    <div class="form-group ant-form-item">
+                        <label for="grandmotherBirth">祖母出生日期</label>
+                        <div style="position: relative;">
+                            <input type="date" id="grandmotherBirth" class="ant-picker ant-input" name="grandmotherBirth" style="width: 100%; padding-right: 45px; cursor: pointer;">
+                            <span class="anticon anticon-calendar" style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #8B0000; pointer-events: none;"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn-calculate ant-btn ant-btn-primary">
+                    ✦ 開始命理分析 ✦
+                </button>
+            </form>
+        </div>
+        
+        <!-- Buddhist Loading Overlay -->
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="loading-buddhist">
+                <div class="lotus-container">
+                    <div class="lotus-petal petal-1"></div>
+                    <div class="lotus-petal petal-2"></div>
+                    <div class="lotus-petal petal-3"></div>
+                    <div class="lotus-petal petal-4"></div>
+                    <div class="lotus-petal petal-5"></div>
+                    <div class="lotus-center">
+                        <span class="dharma-wheel">☸️</span>
+                    </div>
+                </div>
+                <div class="buddhist-symbol">卍</div>
+                <div class="loading-text-buddhist">正在進行命理分析</div>
+                <div class="loading-steps">
+                    <div class="step" id="step1">
+                        <span class="step-icon">📿</span>
+                        <span class="step-text">誦經祈福</span>
+                    </div>
+                    <div class="step" id="step2">
+                        <span class="step-icon">🔮</span>
+                        <span class="step-text">推算八字</span>
+                    </div>
+                    <div class="step" id="step3">
+                        <span class="step-icon">✨</span>
+                        <span class="step-text">五行配名</span>
+                    </div>
+                </div>
+                <div class="buddhist-quote">「名者，命之根基也」</div>
+            </div>
+        </div>
+        
+        <!-- Results Section -->
+        <div class="results-section" id="resultsSection">
+            <div class="result-header">
+                <h2>🎯 命理批算結果</h2>
+                <p style="color: #666;">根據八字五行精心推算</p>
+            </div>
+            
+            <!-- Birth Info -->
+            <div class="birth-info" id="birthInfo">
+                <!-- Dynamic content -->
+            </div>
+            
+            <!-- Bazi Section -->
+            <div class="bazi-section">
+                <h3 class="section-title">☯️ 生辰八字</h3>
+                <div class="bazi-grid" id="baziGrid">
+                    <!-- Dynamic content -->
+                </div>
+                <div class="yong-shen" id="yongShen">
+                    <!-- Dynamic content -->
+                </div>
+            </div>
+            
+            <!-- Primary Names -->
+            <div class="names-section">
+                <h3 class="section-title">⭐ 首選姓名</h3>
+                <div class="primary-names" id="primaryNames">
+                    <!-- Dynamic content -->
+                </div>
+            </div>
+            
+            <!-- Backup Characters -->
+            <div class="backup-chars">
+                <h3>📝 備用字選（可自行選配）</h3>
+                <div class="chars-grid" id="backupChars">
+                    <!-- Dynamic content -->
+                </div>
+            </div>
+            
+            <!-- English Names -->
+            <div class="english-names">
+                <h3>🌍 英文名建議</h3>
+                <div class="english-names-grid" id="englishNames">
+                    <!-- Dynamic content -->
+                </div>
+            </div>
+            
+            <!-- Fortune Analysis -->
+            <div class="fortune-analysis">
+                <h3>📊 運勢分析</h3>
+                <div class="fortune-grid" id="fortuneGrid">
+                    <!-- Dynamic content -->
+                </div>
+            </div>
+            
+            <!-- Ju Ming Comment -->
+            <div class="ju-ming-comment" id="juMingComment">
+                <!-- Dynamic content -->
+            </div>
+            
+            <!-- PDF Button -->
+            <button class="btn-pdf" id="btnPdf" onclick="generatePDF()">
+                📄 下載批命書 PDF
+            </button>
+            
+            <!-- Disclaimer -->
+            <div class="disclaimer">
+                <strong>【八字命理占算】</strong>
+                在科學觀點上祇可作為引証參考和研究，所提供之言論和方案，行使之決斷和成效上，責任在於問事本人。
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Ant Design Style Initialization
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Initialize Ant Design-like form elements
+            initAntDesignForm();
+            
+            // Add smooth animations to all form inputs
+            addAntDesignAnimations();
+        });
+
+        function initAntDesignForm() {
+            // Add Ant Design classes to form elements
+            const inputs = document.querySelectorAll('input[type="text"], input[type="date"], input[type="time"]');
+            inputs.forEach(function(input) {
+                input.classList.add('ant-input');
+                input.setAttribute('placeholder', input.getAttribute('placeholder') || '請輸入');
+            });
+
+            const selects = document.querySelectorAll('select');
+            selects.forEach(function(select) {
+                select.classList.add('ant-select-selector');
+                select.parentElement.classList.add('ant-select');
+                select.parentElement.classList.add('ant-select-outlined');
+            });
+
+            // Enhance date and time inputs with Ant Design styling
+            const dateInputs = document.querySelectorAll('input[type="date"]');
+            dateInputs.forEach(function(input) {
+                input.classList.add('ant-picker');
+                input.style.cursor = 'pointer';
+            });
+
+            const timeInputs = document.querySelectorAll('input[type="time"]');
+            timeInputs.forEach(function(input) {
+                input.classList.add('ant-picker');
+                input.style.cursor = 'pointer';
+            });
+        }
+
+        function addAntDesignAnimations() {
+            // Add focus/blur animations
+            const allInputs = document.querySelectorAll('.ant-input, .ant-select-selector, .ant-picker');
+            allInputs.forEach(function(input) {
+                input.addEventListener('focus', function() {
+                    this.closest('.form-group')?.classList.add('ant-form-item-focused');
+                });
+                input.addEventListener('blur', function() {
+                    this.closest('.form-group')?.classList.remove('ant-form-item-focused');
+                });
+            });
+
+            // Add hover effects to buttons
+            const buttons = document.querySelectorAll('.btn-calculate');
+            buttons.forEach(function(btn) {
+                btn.classList.add('ant-btn');
+                btn.classList.add('ant-btn-primary');
+                btn.addEventListener('mouseenter', function() {
+                    this.classList.add('ant-btn-hover');
+                });
+                btn.addEventListener('mouseleave', function() {
+                    this.classList.remove('ant-btn-hover');
+                });
+            });
+
+            // Add click ripple effect to button
+            const calcBtn = document.querySelector('.btn-calculate');
+            if (calcBtn) {
+                calcBtn.addEventListener('click', function(e) {
+                    const ripple = document.createElement('span');
+                    ripple.classList.add('ant-btn-wave');
+                    ripple.style.cssText = `
+                        position: absolute;
+                        background: rgba(255, 255, 255, 0.3);
+                        border-radius: 50%;
+                        transform: scale(0);
+                        animation: antWave 0.6s ease-out;
+                        pointer-events: none;
+                    `;
+                    
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    ripple.style.width = ripple.style.height = size + 'px';
+                    ripple.style.left = (e.clientX - rect.left - size/2) + 'px';
+                    ripple.style.top = (e.clientY - rect.top - size/2) + 'px';
+                    
+                    this.style.position = 'relative';
+                    this.style.overflow = 'hidden';
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => ripple.remove(), 600);
+                });
+            }
+        }
+
+        // Add wave animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes antWave {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+            
+            .ant-form-item-focused .ant-input,
+            .ant-form-item-focused .ant-select-selector,
+            .ant-form-item-focused .ant-picker {
+                border-color: #8B0000 !important;
+                box-shadow: 0 0 0 2px rgba(139, 0, 0, 0.1) !important;
+            }
+            
+            .ant-btn-hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(139, 0, 0, 0.25) !important;
+            }
+            
+            .ant-btn-wave {
+                position: absolute;
+                border-radius: 50%;
+                transform: scale(0);
+                animation: antWave 0.6s ease-out;
+                pointer-events: none;
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Form submission with Buddhist loading
+        document.getElementById('namingForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Show Buddhist loading overlay
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            loadingOverlay.classList.add('active');
+            loadingOverlay.style.display = 'flex';
+            
+            // Initialize step indicators
+            const steps = [
+                document.getElementById('step1'),
+                document.getElementById('step2'),
+                document.getElementById('step3')
+            ];
+            steps.forEach(step => step.classList.remove('active'));
+            
+            // Animate steps
+            let currentStep = 0;
+            const stepInterval = setInterval(() => {
+                if (currentStep < steps.length) {
+                    steps[currentStep].classList.add('active');
+                    currentStep++;
+                } else {
+                    clearInterval(stepInterval);
+                }
+            }, 1000);
+            
+            // Collect form data
+            const formData = {
+                surname: document.getElementById('surname').value,
+                gender: document.getElementById('gender').value,
+                birthDate: document.getElementById('birthDate').value,
+                birthTime: document.getElementById('birthTime').value,
+                height: document.getElementById('height').value,
+                weight: document.getElementById('weight').value,
+                birthOrder: document.getElementById('birthOrder')?.value || '',
+                birthplace: document.getElementById('birthplace').value,
+                ancestralHome: document.getElementById('ancestralHome').value,
+                parentNames: [
+                    document.getElementById('fatherName').value,
+                    document.getElementById('motherName').value
+                ].filter(Boolean),
+                parentBirths: [
+                    document.getElementById('fatherBirth').value,
+                    document.getElementById('motherBirth').value
+                ].filter(Boolean),
+                grandparentNames: [
+                    document.getElementById('grandfatherName').value,
+                    document.getElementById('grandmotherName').value
+                ].filter(Boolean),
+                grandparentBirths: [
+                    document.getElementById('grandfatherBirth').value,
+                    document.getElementById('grandmotherBirth').value
+                ].filter(Boolean)
+            };
+            
+            try {
+                // Wait 3 seconds for Buddhist loading animation
+                await new Promise(resolve => setTimeout(resolve, 3000));
+                
+                const response = await fetch('/api/calculate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                console.log('Response status:', response.status);
+                console.log('Response headers:', response.headers);
+                
+                const responseText = await response.text();
+                console.log('Response text:', responseText);
+                
+                if (!responseText) {
+                    throw new Error('伺服器返回空回應');
+                }
+                
+                const result = JSON.parse(responseText);
+                
+                if (result.success) {
+                    // Hide loading
+                    loadingOverlay.classList.remove('active');
+                    loadingOverlay.style.display = 'none';
+                    
+                    // Display results
+                    displayResults(result);
+                } else {
+                    loadingOverlay.classList.remove('active');
+                    loadingOverlay.style.display = 'none';
+                    alert('分析失敗：' + result.error);
+                }
+            } catch (error) {
+                loadingOverlay.classList.remove('active');
+                loadingOverlay.style.display = 'none';
+                console.error('Error details:', error);
+                alert('系統錯誤：' + error.message);
+            }
+        });
+        
+        function displayResults(data) {
+            // Show results section
+            document.getElementById('resultsSection').classList.add('active');
+            
+            // Scroll to results
+            document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
+            
+            // Display birth info
+            const birthInfoHtml = `
+                <div class="info-item">
+                    <div class="label">姓氏</div>
+                    <div class="value">${data.birthInfo.surname}</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">性別</div>
+                    <div class="value">${data.birthInfo.gender}</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">新曆</div>
+                    <div class="value">${data.birthInfo.solarDate}</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">時間</div>
+                    <div class="value">${data.birthInfo.solarTime}</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">農曆</div>
+                    <div class="value">${data.birthInfo.lunarDate}</div>
+                </div>
+                <div class="info-item">
+                    <div class="label">時辰</div>
+                    <div class="value">${data.birthInfo.lunarTime}</div>
+                </div>
+            `;
+            document.getElementById('birthInfo').innerHTML = birthInfoHtml;
+            
+            // Display Bazi
+            const baziHtml = `
+                <div class="bazi-cell">
+                    <div class="bazi-label">年柱</div>
+                    ${data.bazi.year}
+                </div>
+                <div class="bazi-cell">
+                    <div class="bazi-label">月柱</div>
+                    ${data.bazi.month}
+                </div>
+                <div class="bazi-cell">
+                    <div class="bazi-label">日柱</div>
+                    ${data.bazi.day}
+                </div>
+                <div class="bazi-cell">
+                    <div class="bazi-label">時柱</div>
+                    ${data.bazi.hour}
+                </div>
+            `;
+            document.getElementById('baziGrid').innerHTML = baziHtml;
+            
+            // Display Yong Shen
+            document.getElementById('yongShen').innerHTML = `
+                <strong>用神：${data.bazi.yongShen}</strong>（${data.bazi.dayMaster}日主）
+            `;
+            
+            // Display Primary Names
+            let primaryNamesHtml = '';
+            data.primaryNames.forEach((name, index) => {
+                const fortune = data.fortune.primary_names_analysis[index];
+                primaryNamesHtml += `
+                    <div class="name-card">
+                        <h3>首選 ${index + 1}</h3>
+                        <div class="name-display">${name.name}</div>
+                        <div class="name-strokes">
+                            <div class="stroke-item">
+                                <div class="char">${name.chars[0]}</div>
+                                <div class="count">${name.strokes[0]}劃</div>
+                            </div>
+                            <div class="stroke-item">
+                                <div class="char">${name.chars[1]}</div>
+                                <div class="count">${name.strokes[1]}劃</div>
+                            </div>
+                        </div>
+                        <div class="fortune-info">
+                            <div class="fortune-item">
+                                <span class="fortune-label">總格：</span>${name.zongge}劃
+                            </div>
+                            <div class="fortune-item">
+                                <span class="fortune-label">三才：</span>${name.sancai_wuxing.configuration}
+                            </div>
+                            <div class="fortune-item">
+                                <span class="fortune-label">主運：</span>${fortune.zhu_yun.gua_name}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            document.getElementById('primaryNames').innerHTML = primaryNamesHtml;
+            
+            // Display Backup Characters
+            let backupCharsHtml = '';
+            data.backupChars.forEach(char => {
+                backupCharsHtml += `
+                    <div class="char-box">
+                        <div class="char">${char.char}</div>
+                        <div class="stroke">${char.strokes}劃</div>
+                    </div>
+                `;
+            });
+            document.getElementById('backupChars').innerHTML = backupCharsHtml;
+            
+            // Display English Names
+            let englishNamesHtml = '';
+            data.englishNames.forEach(name => {
+                englishNamesHtml += `<div class="english-name">${name}</div>`;
+            });
+            document.getElementById('englishNames').innerHTML = englishNamesHtml;
+            
+            // Display Fortune Analysis
+            const firstFortune = data.fortune.primary_names_analysis[0];
+            const fortuneHtml = `
+                <div class="fortune-card">
+                    <h4>主運（總格）</h4>
+                    <div class="number">${firstFortune.zhu_yun.number}劃</div>
+                    <div class="gua-name">${firstFortune.zhu_yun.gua_name}</div>
+                    <div class="description">${firstFortune.zhu_yun.description}</div>
+                </div>
+                <div class="fortune-card">
+                    <h4>前運（人格）</h4>
+                    <div class="number">${firstFortune.qian_yun.number}劃</div>
+                    <div class="gua-name">${firstFortune.qian_yun.gua_name}</div>
+                    <div class="description">${firstFortune.qian_yun.description}</div>
+                </div>
+                <div class="fortune-card">
+                    <h4>後運（地格）</h4>
+                    <div class="number">${firstFortune.hou_yun.number}劃</div>
+                    <div class="gua-name">${firstFortune.hou_yun.gua_name}</div>
+                    <div class="description">${firstFortune.hou_yun.description}</div>
+                </div>
+            `;
+            document.getElementById('fortuneGrid').innerHTML = fortuneHtml;
+            
+            // Display Ju Ming Comment
+            document.getElementById('juMingComment').innerHTML = `
+                <h3>居明評曰</h3>
+                <div class="comment-text">
+                    ${firstFortune.ju_ming_comment.comment}<br>
+                    <small>${firstFortune.ju_ming_comment.note}</small>
+                </div>
+            `;
+            
+            // Store result data for PDF generation
+            window.resultData = data;
+        }
+        
+        async function generatePDF() {
+            if (!window.resultData) {
+                alert('請先進行命理分析');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/generate-pdf', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(window.resultData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    window.open(result.pdfUrl, '_blank');
+                } else {
+                    alert('PDF生成失敗：' + result.error);
+                }
+            } catch (error) {
+                alert('PDF生成錯誤：' + error.message);
+            }
+        }
+    </script>
+</body>
+</html>
