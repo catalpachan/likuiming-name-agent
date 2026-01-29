@@ -24,22 +24,68 @@ class PDFGenerator:
             '/Users/catalpachan/Library/Fonts/AlibabaPuHuiTi-3-65-Medium.ttf',
             '/Users/catalpachan/Library/Fonts/AlibabaPuHuiTi-3-75-SemiBold.ttf',
             '/Users/catalpachan/Library/Fonts/AlibabaPuHuiTi-3-85-Bold.ttf',
+            '/System/Library/Fonts/PingFang.ttc',
+            '/System/Library/Fonts/STHeiti Light.ttc',
+            '/System/Library/Fonts/STHeiti Medium.ttc',
+            '/System/Library/Fonts/Hiragino Sans GB W3.otf',
+            '/System/Library/Fonts/Hiragino Sans GB W6.otf',
         ]
         
         available_fonts = []
         for font_path in font_paths:
             if os.path.exists(font_path):
-                font_name = os.path.basename(font_path).replace('.ttf', '').replace('.otf', '')
-                pdfmetrics.registerFont(TTFont(font_name, font_path))
-                available_fonts.append(font_name)
+                font_name = os.path.basename(font_path).replace('.ttf', '').replace('.otf', '').replace(' ', '_').replace('-', '_')
+                try:
+                    pdfmetrics.registerFont(TTFont(font_name, font_path))
+                    available_fonts.append(font_name)
+                    print(f"Registered font: {font_name}")
+                except Exception as e:
+                    print(f"Failed to register font {font_path}: {e}")
+        
+        # 搜索系統字體目錄
+        system_font_dirs = [
+            '/System/Library/Fonts',
+            '/Library/Fonts'
+        ]
+        
+        for font_dir in system_font_dirs:
+            if os.path.exists(font_dir):
+                try:
+                    for f in os.listdir(font_dir):
+                        if f.endswith(('.ttf', '.otf', '.ttc')) and 'PingFang' in f:
+                            font_path = os.path.join(font_dir, f)
+                            font_name = f.replace('.ttf', '').replace('.otf', '').replace('.ttc', '').replace(' ', '_')
+                            if font_name not in available_fonts:
+                                try:
+                                    pdfmetrics.registerFont(TTFont(font_name, font_path))
+                                    available_fonts.append(font_name)
+                                    print(f"Found system font: {font_name}")
+                                except Exception as e:
+                                    print(f"Failed to register {f}: {e}")
+                except Exception as e:
+                    print(f"Error scanning {font_dir}: {e}")
         
         if not available_fonts:
-            pdfmetrics.registerFont(TTFont('Heiti', '/System/Library/Fonts/STHeiti Medium.ttc'))
-            self.font_normal = 'Heiti'
-            self.font_bold = 'Heiti'
+            print("No Chinese fonts found, using default font")
+            self.font_normal = 'Helvetica'
+            self.font_bold = 'Helvetica-Bold'
         else:
-            self.font_normal = available_fonts[0]
-            self.font_bold = available_fonts[2] if len(available_fonts) > 2 else available_fonts[0]
+            # 選擇字體
+            for fn in available_fonts:
+                if 'Regular' in fn or 'Medium' in fn or 'Light' in fn:
+                    self.font_normal = fn
+                    break
+            if not hasattr(self, 'font_normal') or not self.font_normal:
+                self.font_normal = available_fonts[0]
+            
+            for fb in available_fonts:
+                if 'Bold' in fn or 'SemiBold' in fn or 'Medium' in fb:
+                    self.font_bold = fb
+                    break
+            if not hasattr(self, 'font_bold') or not self.font_bold:
+                self.font_bold = self.font_normal
+            
+            print(f"Using fonts: normal={self.font_normal}, bold={self.font_bold}")
     
     def setup_styles(self):
         """设置PDF样式"""
