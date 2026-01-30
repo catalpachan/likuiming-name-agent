@@ -1051,27 +1051,122 @@
                 grid-template-columns: 1fr;
             }
 
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .form-group {
+                width: 100%;
+            }
+
+            .form-group input,
+            .form-group select {
+                width: 100%;
+                padding: 12px 15px;
+                font-size: 16px;
+            }
+
             .bazi-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
 
+            .header {
+                padding: 30px 15px 25px;
+            }
+
             .header h1 {
-                font-size: 2em;
-                letter-spacing: 4px;
+                font-size: 1.8em;
+                letter-spacing: 3px;
             }
 
             .header .subtitle {
-                font-size: 1em;
-                letter-spacing: 3px;
+                font-size: 0.9em;
+                letter-spacing: 2px;
+                padding: 6px 20px;
             }
 
             .input-section,
             .results-section {
-                padding: 30px 20px;
+                padding: 20px 15px;
+            }
+
+            .input-section::before {
+                letter-spacing: 10px;
             }
 
             .name-display {
-                font-size: 2.2em;
+                font-size: 1.8em;
+            }
+
+            .section-title {
+                font-size: 1.3em;
+                margin-bottom: 20px;
+            }
+
+            .ant-input-group {
+                width: 100% !important;
+            }
+
+            .ant-input-group input {
+                width: 100% !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 25px 10px 20px;
+            }
+
+            .header h1 {
+                font-size: 1.5em;
+                letter-spacing: 2px;
+            }
+
+            .header::before {
+                letter-spacing: 10px;
+                font-size: 12px;
+            }
+
+            .input-section,
+            .results-section {
+                padding: 15px 12px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .form-group {
+                margin-bottom: 10px;
+            }
+
+            .form-group label {
+                font-size: 0.95em;
+                margin-bottom: 8px;
+            }
+
+            .bazi-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .name-display {
+                font-size: 1.5em;
+                padding: 15px;
+            }
+
+            .section-title {
+                font-size: 1.2em;
+            }
+
+            .chars-grid {
+                grid-template-columns: repeat(auto-fit, minmax(55px, 1fr);
+                gap: 8px;
+            }
+
+            .english-names-grid {
+                grid-template-columns: repeat(auto-fit, minmax(80px, 1fr);
             }
         }
 
