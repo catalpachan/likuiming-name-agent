@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "framework": null,
   "builds": [
     {
       "src": "api/**/*.py",
@@ -7,10 +8,6 @@
     },
     {
       "src": "templates/index.html",
-      "use": "static"
-    },
-    {
-      "src": "static/**",
       "use": "static"
     }
   ],
@@ -26,10 +23,6 @@
       "dest": "/api/generate_pdf.py"
     },
     {
-      "src": "/api/download/(.*)",
-      "dest": "/api/download.py"
-    },
-    {
       "src": "/",
       "dest": "/templates/index.html"
     },
@@ -37,8 +30,5 @@
       "src": "/(.*)",
       "dest": "/templates/$1.html"
     }
-  ],
-  "env": {
-    "PYTHONPATH": "."
-  }
+  ]
 }
