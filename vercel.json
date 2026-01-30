@@ -6,36 +6,39 @@
       "use": "@vercel/python"
     },
     {
-      "src": "templates/**",
+      "src": "templates/index.html",
       "use": "static"
     },
     {
-      "src": "requirements.txt",
-      "use": "@vercel/python"
+      "src": "static/**",
+      "use": "static"
     }
   ],
   "routes": [
     {
       "src": "/api/calculate",
-      "methods": ["POST"],
+      "methods": ["POST", "OPTIONS"],
       "dest": "/api/calculate.py"
     },
     {
       "src": "/api/generate-pdf",
-      "methods": ["POST"],
+      "methods": ["POST", "OPTIONS"],
       "dest": "/api/generate_pdf.py"
     },
     {
-      "src": "/download/(.*)",
+      "src": "/api/download/(.*)",
       "dest": "/api/download.py"
-    },
-    {
-      "src": "/(.*).html",
-      "dest": "/templates/$1.html"
     },
     {
       "src": "/",
       "dest": "/templates/index.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/templates/$1.html"
     }
-  ]
+  ],
+  "env": {
+    "PYTHONPATH": "."
+  }
 }
