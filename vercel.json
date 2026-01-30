@@ -1,11 +1,27 @@
 {
   "version": 2,
   "framework": null,
-  "rewrites": [
+  "builds": [
     {
-      "source": "/api/:path*",
-      "destination": "/api/:path*"
+      "src": "api/**/*.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/calculate",
+      "dest": "/api/calculate.py"
     },
+    {
+      "src": "/api/generate-pdf",
+      "dest": "/api/generate_pdf.py"
+    },
+    {
+      "src": "/api/download/(.*)",
+      "dest": "/api/download.py"
+    }
+  ],
+  "rewrites": [
     {
       "source": "/(.*)",
       "destination": "/templates/index.html"
