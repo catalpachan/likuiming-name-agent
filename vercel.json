@@ -1,14 +1,9 @@
 {
   "version": 2,
-  "framework": null,
   "builds": [
     {
       "src": "api/**/*.py",
       "use": "@vercel/python"
-    },
-    {
-      "src": "templates/index.html",
-      "use": "static"
     }
   ],
   "routes": [
@@ -23,12 +18,26 @@
       "dest": "/api/generate_pdf.py"
     },
     {
-      "src": "/",
-      "dest": "/templates/index.html"
+      "src": "/api/download/(.*)",
+      "dest": "/api/download.py"
+    },
+    {
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
+    },
+    {
+      "src": "/(.*).html",
+      "dest": "/templates/$1.html"
     },
     {
       "src": "/(.*)",
-      "dest": "/templates/$1.html"
+      "dest": "/templates/index.html"
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/templates/index.html"
     }
   ]
 }
