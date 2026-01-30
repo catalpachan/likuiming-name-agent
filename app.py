@@ -17,6 +17,29 @@ def after_request(response):
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
     return response
 
+@app.route('/api/health', methods=['GET'])
+def health_check():
+    """健康检查接口"""
+    return jsonify({'status': 'ok', 'message': '服务正常运行'})
+
+@app.route('/api/config', methods=['GET'])
+def get_config():
+    """获取小程序配置"""
+    return jsonify({
+        'success': True,
+        'data': {
+            'appName': '李居明起名系统',
+            'version': '1.0.0',
+            'features': [
+                '八字分析',
+                '五行配名',
+                '三才五格',
+                '运势分析',
+                'PDF报告'
+            ]
+        }
+    })
+
 @app.route('/')
 def index():
     return render_template('index.html')
