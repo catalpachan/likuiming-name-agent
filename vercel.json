@@ -1,12 +1,11 @@
 {
   "version": 2,
   "framework": null,
-  "builds": [
-    {
-      "src": "api/**/*.py",
-      "use": "@vercel/python"
+  "functions": {
+    "api/**/*.py": {
+      "maxDuration": 60
     }
-  ],
+  },
   "routes": [
     {
       "src": "/api/calculate",
