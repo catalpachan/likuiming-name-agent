@@ -1,0 +1,32 @@
+{
+  "version": 2,
+  "framework": null,
+  "builds": [
+    {
+      "src": "api/*.py",
+      "use": "@vercel/python"
+    },
+    {
+      "src": "templates/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/calculate",
+      "dest": "/api/calculate.py"
+    },
+    {
+      "src": "/api/generate-pdf",
+      "dest": "/api/generate_pdf.py"
+    },
+    {
+      "src": "/api/download/(.*)",
+      "dest": "/api/download.py"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/templates/index.html"
+    }
+  ]
+}
