@@ -1,27 +1,19 @@
 {
   "version": 2,
   "framework": null,
-  "routes": [
-    {
-      "src": "/api/calculate",
-      "methods": ["POST", "OPTIONS"],
-      "dest": "/api/calculate.py"
-    },
-    {
-      "src": "/api/generate-pdf",
-      "methods": ["POST", "OPTIONS"],
-      "dest": "/api/generate_pdf.py"
-    },
-    {
-      "src": "/(.*)\\.html",
-      "dest": "/templates/$1.html"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/templates/index.html"
-    }
-  ],
   "rewrites": [
+    {
+      "source": "/api/calculate",
+      "destination": "/api/calculate.py"
+    },
+    {
+      "source": "/api/generate-pdf",
+      "destination": "/api/generate_pdf.py"
+    },
+    {
+      "source": "/(.*)\\.html",
+      "destination": "/templates/$1.html"
+    },
     {
       "source": "/(.*)",
       "destination": "/templates/index.html"
