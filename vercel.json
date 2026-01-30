@@ -1,22 +1,36 @@
 {
   "version": 2,
   "framework": null,
-  "rewrites": [
+  "builds": [
     {
-      "source": "/api/calculate",
-      "destination": "/api/calculate.py"
+      "src": "api/**/*.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/calculate",
+      "dest": "/api/calculate.py"
     },
     {
-      "source": "/api/generate-pdf",
-      "destination": "/api/generate_pdf.py"
+      "src": "/api/generate-pdf",
+      "dest": "/api/generate_pdf.py"
     },
     {
-      "source": "/(.*)\\.html",
-      "destination": "/templates/$1.html"
+      "src": "/api/download/(.*)",
+      "dest": "/api/download.py"
     },
     {
-      "source": "/(.*)",
-      "destination": "/templates/index.html"
+      "src": "/(.*)\\.html",
+      "dest": "/templates/$1.html"
+    },
+    {
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
+    },
+    {
+      "src": "/",
+      "dest": "/templates/index.html"
     }
   ]
 }
