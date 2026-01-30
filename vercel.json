@@ -19,12 +19,14 @@
     {
       "src": "/api/download/(.*)",
       "dest": "/api/download.py"
-    }
-  ],
-  "rewrites": [
+    },
     {
-      "source": "/(.*)",
-      "destination": "/templates/index.html"
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
+    },
+    {
+      "src": "/",
+      "dest": "/templates/index.html"
     }
   ]
 }
