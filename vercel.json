@@ -1,11 +1,6 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "api/**/*.py",
-      "use": "@vercel/python"
-    }
-  ],
+  "framework": null,
   "routes": [
     {
       "src": "/api/calculate",
@@ -18,15 +13,7 @@
       "dest": "/api/generate_pdf.py"
     },
     {
-      "src": "/api/download/(.*)",
-      "dest": "/api/download.py"
-    },
-    {
-      "src": "/static/(.*)",
-      "dest": "/static/$1"
-    },
-    {
-      "src": "/(.*).html",
+      "src": "/(.*)\\.html",
       "dest": "/templates/$1.html"
     },
     {
