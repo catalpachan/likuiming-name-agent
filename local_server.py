@@ -1,64 +1,67 @@
 #!/usr/bin/env python3
 """
 本地開發服務器
-同時提供靜態頁面和 API 代理到 Vercel
+直接使用本地 API 函數，不依賴 Vercel
 """
 import http.server
 import socketserver
 import json
-import urllib.request
-import urllib.error
 import os
+import sys
+
+# 添加 api 目錄到路徑
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'api'))
+
+from calculate import handler as calculate_handler
 
 PORT = 8080
-VERCEL_API_URL = "https://likuiming-name-agent.vercel.app"
 
 class MyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     def do_POST(self):
-        """處理 API 請求"""
-        if self.path.startswith('/api/'):
-            # 轉發到 Vercel
-            content_length = int(self.headers['Content-Length'])
-            post_data = self.rfile.read(content_length)
-            
+        """處理 API 請求 - 直接調用本地函數"""
+        if self.path == '/api/calculate':
             try:
-                vercel_url = VERCEL_API_URL + self.path
-                req = urllib.request.Request(
-                    vercel_url,
-                    data=post_data,
-                    headers={
-                        'Content-Type': 'application/json',
-                        'User-Agent': 'Mozilla/5.0'
-                    },
-                    method='POST'
-                )
+                content_length = int(self.headers['Content-Length'])
+                post_data = self.rfile.read(content_length)
+                data = json.loads(post_data.decode('utf-8'))
                 
-                with urllib.request.urlopen(req, timeout=30) as response:
-                    response_data = response.read().decode('utf-8')
-                    self.send_response(response.status)
-                    self.send_header('Content-Type', 'application/json')
-                    self.send_header('Access-Control-Allow-Origin', '*')
-                    self.end_headers()
-                    self.wfile.write(response_data.encode('utf-8'))
-                    
-            except urllib.error.HTTPError as e:
-                error_body = e.read().decode('utf-8')
-                self.send_response(e.code)
+                class LocalRequest:
+                    method = 'POST'
+                    json = data
+                
+                result = calculate_handler(LocalRequest())
+                
+                self.send_response(result.get('statusCode', 200))
                 self.send_header('Content-Type', 'application/json')
                 self.send_header('Access-Control-Allow-Origin', '*')
                 self.end_headers()
-                self.wfile.write(error_body.encode('utf-8'))
+                self.wfile.write(result['body'].encode('utf-8'))
                 
             except Exception as e:
+                error_resp = json.dumps({'success': False, 'error': str(e)})
                 self.send_response(500)
                 self.send_header('Content-Type', 'application/json')
                 self.send_header('Access-Control-Allow-Origin', '*')
                 self.end_headers()
-                error_resp = json.dumps({'success': False, 'error': str(e)})
                 self.wfile.write(error_resp.encode('utf-8'))
+        
+        elif self.path == '/api/generate-pdf':
+            self.send_response(501)
+            error_resp = json.dumps({'success': False, 'error': 'PDF generation not available locally'})
+            self.send_header('Content-Type', 'application/json')
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.end_headers()
+            self.wfile.write(error_resp.encode('utf-8'))
+        
         else:
             self.send_response(404)
             self.end_headers()
+    
+    def do_GET(self):
+        """處理靜態文件請求"""
+        if self.path == '/' or self.path == '/index.html':
+            self.path = '/index.html'
+        return super().do_GET()
     
     def do_OPTIONS(self):
         """處理 CORS 預檢請求"""
@@ -76,7 +79,7 @@ if __name__ == '__main__':
     os.chdir('templates')
     with socketserver.TCPServer(("", PORT), MyHTTPRequestHandler) as httpd:
         print(f"✓ 本地服務器運行中: http://localhost:{PORT}")
-        print(f"✓ API 將轉發到: {VERCEL_API_URL}")
+        print(f"✓ API: 直接調用本地函數")
         print(f"✓ 按 Ctrl+C 停止服務器")
         try:
             httpd.serve_forever()
