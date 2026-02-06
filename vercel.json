@@ -1,18 +1,11 @@
 {
   "version": 2,
   "framework": null,
-  "functions": {
-    "api/calculate.py": {
-      "maxDuration": 60
-    },
-    "api/generate_pdf.py": {
-      "maxDuration": 60
-    },
-    "api/download.py": {
-      "maxDuration": 60
-    }
-  },
   "builds": [
+    {
+      "src": "api/*.py",
+      "use": "@vercel/python"
+    },
     {
       "src": "templates/**",
       "use": "@vercel/static"
